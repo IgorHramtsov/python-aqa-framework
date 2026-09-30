@@ -20,12 +20,18 @@ pipeline {
             steps {
                 script {
                     if (params.TEST_SUITE == 'all') {
-                        bat 'docker run --rm python-aqa-framework pytest -v'
+                        bat 'docker run --rm -v "%CD%\\allure-results:/app/allure-results" python-aqa-framework pytest -v --alluredir=/app/allure-results'
                     } else {
-                        bat "docker run --rm python-aqa-framework pytest -m ${params.TEST_SUITE} -v"
+                        bat "docker run --rm -v \"%CD%\\allure-results:/app/allure-results\" python-aqa-framework pytest -m ${params.TEST_SUITE} -v --alluredir=/app/allure-results"
                     }
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            allure results: [[path: 'allure-results']]
         }
     }
 }
