@@ -12,9 +12,6 @@ class InventoryPage:
         self.inventory_item = page.get_by_test_id("inventory-item")
         self.inventory_item_name = page.get_by_test_id("inventory-item-name")
         self.inventory_item_price = page.get_by_test_id("inventory-item-price")
-        # self.shopping_cart_badge = page.get_by_test_id("shopping-cart-badge")
-        # self.empty_shopping_cart = page.get_by_role("button", name="Cart, empty")
-        # self.sort_dropdown = page.get_by_test_id("product-sort-container")
         self.sort_dropdown = page.get_by_role("combobox", name="Sort products")
 
     def get_product(self, product_index: int):

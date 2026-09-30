@@ -67,7 +67,7 @@ def test_get_pets_by_status(pet_client, status):
         assert pet["status"] == status
 
 
-def test_get_non_existent_pet(pet_client):
+def test_get_nonexistent_pet(pet_client):
     nonexistent_pet_id = 1002023020
     response = pet_client.get_pet(nonexistent_pet_id)
     assert response.status_code == 404

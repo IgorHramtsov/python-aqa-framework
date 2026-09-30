@@ -13,7 +13,6 @@ class CartPage:
         self.item_quantity = page.get_by_test_id("item-quantity")
         self.inventory_item_name = page.get_by_test_id("inventory-item-name")
         self.inventory_item_price = page.get_by_test_id("inventory-item-price")
-        # self.shopping_cart_badge = page.get_by_test_id("shopping-cart-badge")
         self.remove_item = page.get_by_role("button", name = "Remove")
         self.continue_shopping = page.get_by_role("button", name = "Continue Shopping")
         self.checkout_button = page.get_by_role("button", name = "Checkout")
