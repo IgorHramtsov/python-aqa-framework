@@ -1,13 +1,9 @@
 from playwright.sync_api import Page, expect
-from pages.components.header import Header
 
 
 class CheckoutCompletePage:
 
     def __init__(self, page: Page):
-        self.page = page
-        self.header = Header(page)
-
         self.complete_thanks = page.get_by_test_id("complete-header")
         self.complete_comment = page.get_by_test_id("complete-text")
         self.back_home_button = page.get_by_role("button", name="Back Home")

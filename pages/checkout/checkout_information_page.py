@@ -1,17 +1,12 @@
 from playwright.sync_api import Page, expect
-from pages.components.header import Header
 
 
 class CheckoutInformationPage:
 
     def __init__(self, page: Page):
-        self.page = page
-        self.header = Header(page)
-
         self.first_name_input = page.get_by_test_id("firstName")
         self.last_name_input = page.get_by_test_id("lastName")
         self.postal_code_input = page.get_by_test_id("postalCode")
-        self.cancel_button = page.get_by_role("button", name="Cancel")
         self.continue_button = page.get_by_role("button", name="Continue")
         self.error_message = page.get_by_test_id("error")
         self.error_button = page.get_by_test_id("error-button")

@@ -1,3 +1,6 @@
+from collections import Counter
+from decimal import Decimal
+
 from playwright.sync_api import Page, expect
 from pages.components.header import Header
 
@@ -5,10 +8,8 @@ from pages.components.header import Header
 class InventoryPage:
 
     def __init__(self, page: Page):
-        self.page = page
         self.header = Header(page)
 
-        self.inventory_list = page.get_by_test_id("inventory-list")
         self.inventory_item = page.get_by_test_id("inventory-item")
         self.inventory_item_name = page.get_by_test_id("inventory-item-name")
         self.inventory_item_price = page.get_by_test_id("inventory-item-price")
@@ -29,9 +30,6 @@ class InventoryPage:
         product = self.get_product(product_index)
         product.get_by_role("button", name="Add to cart").click()
 
-    def get_shopping_cart_badge_amount(self) -> str:
-        return self.header.shopping_cart_badge.inner_text()
-
     def navigate_to_shopping_cart(self):
         self.header.cart.click()
 
@@ -44,19 +42,26 @@ class InventoryPage:
     def sort_products(self, option: str):
         self.sort_dropdown.select_option(option)
 
-    def check_products_sorted_by_name(self, reverse: bool = False):
-        actual_names = self.inventory_item_name.all_inner_texts()
-        expected_names = sorted(actual_names, reverse=reverse)
-
-        assert actual_names == expected_names
-
-    def check_products_sorted_by_price(self, reverse: bool = False):
-        price_texts = self.inventory_item_price.all_inner_texts()
-
-        actual_prices = [
-            float(price.replace("$", ""))
-            for price in price_texts
+    def get_products(self) -> list[tuple[str, Decimal]]:
+        return [
+            (self.get_product_name(index), Decimal(self.get_product_price(index).removeprefix("$")))
+            for index in range(self.inventory_item.count())
         ]
 
-        expected_prices = sorted(actual_prices, reverse=reverse)
-        assert actual_prices == expected_prices
+    def check_products_sorted(self, original_products, sort_type: str, reverse: bool):
+        assert len(original_products) > 1, "Sorting requires at least two products"
+        key_index = 0 if sort_type == "name" else 1
+        expected_values = sorted(
+            (product[key_index] for product in original_products), reverse=reverse
+        )
+        expect(self.inventory_item).to_have_count(len(original_products))
+        if sort_type == "name":
+            expect(self.inventory_item_name).to_have_text(expected_values)
+        else:
+            expect(self.inventory_item_price).to_have_text(
+                [f"${price:.2f}" for price in expected_values]
+            )
+        actual_products = self.get_products()
+        assert Counter(actual_products) == Counter(original_products), (
+            f"Catalog changed during sorting: before={original_products}, after={actual_products}"
+        )

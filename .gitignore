@@ -3,5 +3,8 @@
 __pycache__/
 .pytest_cache/
 allure-results/
+allure-report/
+test-results/
 *.pyc
 .env
+.env.*

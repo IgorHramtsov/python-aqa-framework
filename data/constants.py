@@ -1,5 +1,3 @@
-import re
-
 STANDARD_USER = "standard_user"
 LOCKED_OUT_USER = "locked_out_user"
 PASSWORD = "secret_sauce"
@@ -24,8 +22,4 @@ SUCCESSFUL_ORDER = (
 
 COMMENT_FOR_SUCCESSFUL_ORDER = (
     "Your order has been dispatched, and will arrive just as fast as the pony can get there!"
-)
-
-ERROR_FOR_CHECKOUT_FORM = re.compile(
-    r"^Error: (First Name|Last Name|Postal Code) is required$"
 )

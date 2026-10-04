@@ -8,6 +8,9 @@ class PetClient:
     def __init__(self):
         self.session = requests.Session()
 
+    def close(self):
+        self.session.close()
+
     def create_pet(self, payload: dict):
         return self.session.post(
             f"{BASE_API_URL}/pet",
